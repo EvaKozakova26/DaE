@@ -3,6 +3,7 @@
  ## Menu
  - [Navigace po mapě](#navigation-around-map)
  - [Přepínání kamery](#switching-cameras)
+ - [Pohyb WSAD](#pohyb-wsad)
    
 ## Navigation around map
 
@@ -55,6 +56,24 @@ Trocha vysvětlení:</b>
  * **First Person Camera, Camera 1** jsou reference na kamery ze scény
  * **FlipFlop** je funkce, která reaguje na opakované přepínání tlačítka (definované v *Toggle_Perspective*)
  * **SetActive** nastavuje danou komponentu (kameru) jako aktivní v reakci na stisk tlačítka přes *FlipFlop* funkci 
+
+## Pohyb WSAD
+Nastavení ovládání postavy pomocí WSAD lze jednoduše udělat přes blueprinty a nastavení inputů.</b>
+* Nastavení **AXIS** inputů na tlačítka WSAD
+  * W pohyb dopředu - hodnota 1 a S - pohyb dozadu - (inverzní) hodnota -1
+  * D pohyb doprava - hodnota 1 a A - pohyb doleva - (inverzní) hodnota -1
+ ![input](https://github.com/EvaKozakova26/DaE/blob/dev/resources/inputs.PNG "inputs")
+
+* Graf v Blueprintu
+  * **InputAction MoveForward/MoveRight** je reference na input, který jsme definovali v předchozím kroku
+  * **Add Movement Input** Metoda, která realizuje pohyb daným směrem
+    * **World Direction** - směr pohybu, hodnota z *Get Forward/Right Vector*
+    * **Scale Value** - hodnota, kterou se daný směrový vektor vynásobí a tím se určí směr dopředu/dozadu, popř. doleva/doprava. Viz obrázek inputů.
+  * **Get Forward/Right Vector** Metoda, která získá hodnotu vektoru (pro daný směr) relativně k současné pozici postavy
+   ![wsad](https://github.com/EvaKozakova26/DaE/blob/dev/resources/wasd.PNG "wsad blueprints")
+
+  
+
 
 
  
