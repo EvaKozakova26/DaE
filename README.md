@@ -1,17 +1,19 @@
 ﻿# DaE - Developed with Unreal Engine 4
  
- ## Aktuální podoba
+## Aktuální podoba
  1.1.2021<br/>
  ![now](https://github.com/EvaKozakova26/DaE/blob/dev/resources/now.PNG "Now")
 
  
- ## Menu
+## Menu
  ## Unreal Engine
  - [Navigace po mapě](#navigation-around-map)
  - [Přepínání kamery](#switching-cameras)
  - [Pohyb WSAD](#pohyb-wsad)
  ## Blender
-   
+
+
+---
 ## Navigation around map
 
 V UE můžeme použít statickou nebo dynamickou navigaci. My používáme dynamickou. To znamená, že výpočet polí, na které může postava vstoupit se provádí dynamicky a relativně k pohybu postavy, takže postava dokáže reagovat na neočekáváné překážky.
