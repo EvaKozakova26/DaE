@@ -1,9 +1,16 @@
 ﻿# DaE - Developed with Unreal Engine 4
  
+ ## Aktuální podoba
+ 1.1.2021<br/>
+ ![now](https://github.com/EvaKozakova26/DaE/blob/dev/resources/now.PNG "Now")
+
+ 
  ## Menu
+ ## Unreal Engine
  - [Navigace po mapě](#navigation-around-map)
  - [Přepínání kamery](#switching-cameras)
  - [Pohyb WSAD](#pohyb-wsad)
+ ## Blender
    
 ## Navigation around map
 
