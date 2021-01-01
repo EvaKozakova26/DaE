@@ -10,6 +10,7 @@
  - [Navigace po mapě](#navigation-around-map)
  - [Přepínání kamery](#switching-cameras)
  - [Pohyb WSAD](#pohyb-wsad)
+ - [Interakce](#interakce)
  ## Blender
 
 
@@ -80,6 +81,25 @@ Nastavení ovládání postavy pomocí WSAD lze jednoduše udělat přes bluepri
     * **Scale Value** - hodnota, kterou se daný směrový vektor vynásobí a tím se určí směr dopředu/dozadu, popř. doleva/doprava. Viz obrázek inputů.
   * **Get Forward/Right Vector** Metoda, která získá hodnotu vektoru (pro daný směr) relativně k současné pozici postavy
    ![wsad](https://github.com/EvaKozakova26/DaE/blob/dev/resources/wasd.PNG "wsad blueprints")
+   
+## Interakce
+V této dokumentaci je popsána interakce hráče a vstupní brány: Na stisk tlačítka E se brána otervře a následně se po menší prodlevě sama zavře.<br/>
+Je potřeba vytvořit novou *Blueprint Class* - náš název je DOORS_Gate. Zde nás zajímají 2 sekce - *Viewport* a *EventGraph*.
+#### Viewport
+![gate](https://github.com/EvaKozakova26/DaE/blob/dev/resources/gate_viewport.PNG "gate viewport") <br/>
+Do Viewportu je potřeba přetáhnou objekt, se kterým chceme provádět interakci, tedy v našem případě bránu (pravá i levá vrata).<br/>
+Pivot (bod počátku) musí být nastaven tak, aby se dalo dvěřmi rotovat (otevírat je) po ose Z.<br/>
+
+#### Event Graph (Blueprint)
+![graph](https://github.com/EvaKozakova26/DaE/blob/dev/resources/gate_bp.PNG "gate viewport") <br/>
+
+
+
+
+
+
+
+
 
   
 
