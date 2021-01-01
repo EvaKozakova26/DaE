@@ -1,4 +1,5 @@
-﻿# DaE - Developed with Unreal Engine 4
+# DaE
+Developed with Unreal Engine and Blender
  
 ## Aktuální podoba
  1.1.2021<br/>
@@ -68,7 +69,7 @@ Trocha vysvětlení:</b>
  * **SetActive** nastavuje danou komponentu (kameru) jako aktivní v reakci na stisk tlačítka přes *FlipFlop* funkci 
 
 ## Pohyb WSAD
-Nastavení ovládání postavy pomocí WSAD lze jednoduše udělat přes blueprinty a nastavení inputů.</b>
+Nastavení ovládání postavy pomocí WSAD lze jednoduše udělat přes blueprinty a nastavení inputů.
 * Nastavení **AXIS** inputů na tlačítka WSAD
   * W pohyb dopředu - hodnota 1 a S - pohyb dozadu - (inverzní) hodnota -1
   * D pohyb doprava - hodnota 1 a A - pohyb doleva - (inverzní) hodnota -1
@@ -91,8 +92,35 @@ Do Viewportu je potřeba přetáhnou objekt, se kterým chceme provádět intera
 Pivot (bod počátku) musí být nastaven tak, aby se dalo dvěřmi rotovat (otevírat je) po ose Z.<br/>
 
 #### Event Graph (Blueprint)
+Je potřeba definovat vlastní proměnné
+* *IsTrigger* - boolean, kolize je/není triggrovaná
+* *Open* - boolean, brána je/není otevřena
+* *Angle_Left/Right* - float, úhel, do kterého se dveře mají otevřít
 ![graph](https://github.com/EvaKozakova26/DaE/blob/dev/resources/gate_bp.PNG "gate viewport") <br/>
-
+Co znamenají jednotlivé nody a jak to spolu funguje: <br/>
+* **Gate Interaction** - skupina nodů, která detekuje interakci a  provádí základní nastavení proměnných
+  * **Get Player Controller** - Getter pro získání Player Controlleru
+    * *PlayerController* - rozhraní mezi *Pawn* a fyzickým hráčem, řídí, co chci s postavou dělat
+    * *Pawn* - základní třída Actora, fyzická reprezentace (AI, fyzická lokace, interakce, kolize, rotace,...) to vše detekuje právě *Pawn*
+  * **On Component Begin Overlap (Box)** - Událost, která detekuje začátek "kolize" s boxem (colliderem)
+  * **On Component End Overlap (Box)** - Událost, která detekuje opuštění kolize
+  * **Enable Input** - povoluje, že Actor (gate) může přijímat inputy od *PlayerController*
+  * **Disable Input** - zakazuje Actorovi přijímat inputy od *PlayerController*
+  * **Set IsTrigger** - nastavuje hodnotu proměnné *IsTrigger* <br/>
+*Při opuštění kolize proběhne invertovaná rotace*
+  * **Branch** - rozhodovací větev, v tomto případě: Pokud *Open* je *true*, prověď další akci
+  * **Delay** - Následující akce se zavolá až po určité prodlevě
+  * **Sequence** - Vykoná se *n* akcí za sebou
+    * V tomto případě se volá parametr *Reverse* u timeliny obou vrat *doors* - animace otevírání tedy proběhne obráceně - brána se zavře
+* **Gate Right** - skupina nodů, která provádí otevírání pravých dveří
+  * **InputAction Interact** - Detekce input akce definované v Project Settings (v tomto případě stisk tlačítka **E**)
+  * **Branch** - rozhodovací větev, v tomto případě: až se stiskne tlačítko a *IsTrigger* je *true*, tak proveď další akci
+  * **doors_r (timeline)** - popisuje vývoj proměnné v čase
+    * realizace animace
+    * v tomto případě: *Angle* se posune z 0 na 130 za 1s po ose Z (viz *SetRelativeRotation*)
+  * **SetRelativeRotation** - funkce, která danou rotaci vykonává
+* **Gate Left** - skupina nodů, která provádí otevírání levých dveří
+  * stejný princip jako u *Gate Right*
 
 
 
