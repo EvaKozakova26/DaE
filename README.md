@@ -12,6 +12,7 @@ Developed with Unreal Engine and Blender
  - [Přepínání kamery](#switching-cameras)
  - [Pohyb WSAD](#pohyb-wsad)
  - [Interakce](#interakce)
+ - [Rotace kamery](#rotace-kamery)
  ## Blender
 
 
@@ -121,6 +122,25 @@ Co znamenají jednotlivé nody a jak to spolu funguje: <br/>
   * **SetRelativeRotation** - funkce, která danou rotaci vykonává
 * **Gate Left** - skupina nodů, která provádí otevírání levých dveří
   * stejný princip jako u *Gate Right*
+
+## Rotace kamery
+V projektu lze při stisku středního tlačítka myši rotovat kamerou jak je libo.<br/>
+Základní nastavení kamery je popsáno v kapitole [Přepínání kamery](#switching-cameras).<br/>
+Zbyek se nastavuje v blueprintech. Nejprve je se detekuje stisk tlačítka: <br/>
+![trigger](https://github.com/EvaKozakova26/DaE/blob/dev/resources/trigger_camera_move.PNG "trigger camera move") <br/>
+* **EventTick** - nejzákladnější událost při běhu hry, volá se každý frame
+* **Gate** - začíná/ukončuje stream událostí<br/>
+*Tedy každý frame se dostaneme do proudu událostí, které jsou otevřeny, tedy v tomto případě se stream otevře při stisku středního tlačítka myši*
+* **CameraMovement** - naše custom funkce, kde definujeme samotný pohyb kamery
+  * ![cam_move](https://github.com/EvaKozakova26/DaE/blob/dev/resources/camera_move.PNG "camera move") <br/>
+  * **GetWorldRotation** - Vrátí aktuální rotaci targetu, tedy kamery (Spring Arm 1)
+    * *Rotator* - 3 floaty repreyentující rotaci v 3D prostoru (Roll - X, Pitch - Y, Yaw - Z)
+  * **BreakRotator** - "rozbije" Rotator na úhly a stupně (Roll, Pitch, Yaw)
+  * **Clamp (float)** - nastaví hranice (min/max), kterých může daní hodnota dosáhnout
+  * **MakeRotator** - sestaví Rotator z dodaných hodnot
+  * **SetWorldRotation** - provede rotaci objektu podle vstupního Rotatoru<br/>
+ *Tedy nejprve získáme aktuální hodnoty rotace z kamery, ponecháme hodnoty na ose X, osy Y a Z dopočítáme podle pohybu myši a následně z hodnot vytvoříme novou rotaci.*<br/>
+ *To vše pokud držíme střední tlačítko myši. Po povolení se Gate uzavře.*
 
 
 
