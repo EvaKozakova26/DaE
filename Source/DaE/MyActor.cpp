@@ -2,6 +2,7 @@
 
 
 #include "MyActor.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 // constructor of the class, called when the Actor is created
@@ -9,6 +10,16 @@ AMyActor::AMyActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// create instance of Root Component defined in .h file
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+
+	// each Actor has RootComonent which represents transform of Actot - translation, rotation and scale
+	// in UE editor - axis are visible
+	RootComponent = Root;
+
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->AttachTo(Root);
 
 }
 
