@@ -3,6 +3,8 @@
 
 #include "MyActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TextRenderComponent.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 
 // Sets default values
 // constructor of the class, called when the Actor is created
@@ -21,6 +23,17 @@ AMyActor::AMyActor()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->AttachTo(Root);
 
+	// Create the TextRenderComponent and add a generic "Press E to Interact"
+	// message and set it to be invisible so the PlayerCharacter can't see it
+	// and lastly attach it to the RootComponent.
+	NoticeText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("NoticeText"));
+	NoticeText->SetRelativeLocation(FVector(-130.f, -90.f, 80.f));
+	NoticeText->SetRelativeRotation(FQuat(90.0f, 0.f, 90.0f, 1.0f));
+	NoticeText->SetText(FText::FromString("Press E to Interact"));
+	NoticeText->SetTextRenderColor(FColor::White);
+	NoticeText->SetVisibility(false);
+	NoticeText->SetupAttachment(Root);
+
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +44,9 @@ void AMyActor::BeginPlay()
 
 	FString sText = FString::Printf(TEXT("Actor name is %s"), *this->GetName());
 	UE_LOG(LogActor, Warning, TEXT("**** UE4 started - %s "), *sText);
+
+	// gets current location of actor mesh
+	mCurrentMeshLocation = Mesh->GetRelativeTransform().GetLocation();
 	
 }
 
@@ -39,5 +55,31 @@ void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// calculates the distance between player and this actor
+	float distance = this->GetDistanceTo(Player); 
+	FVector meshLocation = mCurrentMeshLocation;
+
+	if (distance < 150)
+	{
+		NoticeText->SetVisibility(true);
+
+		// lift the object up (increase Z location)
+		// mesh component has to be set to "moveable" in UE editor
+		if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->WasInputKeyJustPressed(EKeys::E))
+		{
+			NoticeText->SetRelativeLocation(FVector(-130.f, -50.f, 80.f));
+			NoticeText->SetText(FText::FromString("Looting..."));
+			meshLocation.Z += 30;
+			Mesh->SetRelativeLocation(meshLocation);
+		}
+	}
+	else {
+		// set default state for object and notice text
+		NoticeText->SetRelativeLocation(FVector(-130.f, -90.f, 80.f));
+		NoticeText->SetText(FText::FromString("Press E to Interact"));
+		NoticeText->SetVisibility(false);
+		Mesh->SetRelativeLocation(mCurrentMeshLocation);
+	}
+	
 }
 

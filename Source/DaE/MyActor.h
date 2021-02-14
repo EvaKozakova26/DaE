@@ -29,4 +29,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere)
+	AActor* Player;
+
+	// The TextRenderComponent that appears above this Actor when the PlayerCharacter
+	// is able to interact with a part of it.
+	UPROPERTY(EditAnywhere)
+    class UTextRenderComponent* NoticeText;
+
+private:
+	FVector mCurrentMeshLocation;
+
 };
