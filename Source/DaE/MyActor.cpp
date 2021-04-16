@@ -2,9 +2,12 @@
 
 
 #include "MyActor.h"
+#include "Item.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include <iostream> 
+using namespace std;
 
 // Sets default values
 // constructor of the class, called when the Actor is created
@@ -32,7 +35,16 @@ AMyActor::AMyActor()
 	NoticeText->SetText(FText::FromString("Press E to Interact"));
 	NoticeText->SetTextRenderColor(FColor::White);
 	NoticeText->SetVisibility(false);
-	NoticeText->SetupAttachment(Root);
+	NoticeText->AttachTo(Root);
+
+	// create TextRenderComponent with loot information from the chest (object)
+	LootText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("LootText"));
+	LootText->SetRelativeLocation(FVector(-260.f, -90.f, 80.f));
+	LootText->SetRelativeRotation(FQuat(90.0f, 0.f, 90.0f, 1.0f));
+	LootText->SetText(FText::FromString("LOOOOOOTTTTT INFOOOOO"));
+	LootText->SetTextRenderColor(FColor::White);
+	LootText->SetVisibility(false);
+	LootText->AttachTo(Root);
 
 }
 
@@ -47,7 +59,6 @@ void AMyActor::BeginPlay()
 
 	// gets current location of actor mesh
 	mCurrentMeshLocation = Mesh->GetRelativeTransform().GetLocation();
-	
 }
 
 // Called every frame
@@ -71,6 +82,7 @@ void AMyActor::Tick(float DeltaTime)
 			NoticeText->SetText(FText::FromString("Looting..."));
 			meshLocation.Z += 30;
 			Mesh->SetRelativeLocation(meshLocation);
+			LootText->SetVisibility(true);
 		}
 	}
 	else {
@@ -79,6 +91,7 @@ void AMyActor::Tick(float DeltaTime)
 		NoticeText->SetText(FText::FromString("Press E to Interact"));
 		NoticeText->SetVisibility(false);
 		Mesh->SetRelativeLocation(mCurrentMeshLocation);
+		LootText->SetVisibility(false);
 	}
 	
 }

@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MyActor.generated.h"
@@ -36,6 +35,14 @@ public:
 	// is able to interact with a part of it.
 	UPROPERTY(EditAnywhere)
     class UTextRenderComponent* NoticeText;
+
+	// info about loot contained in chest or something
+	UPROPERTY(EditAnywhere)
+	class UTextRenderComponent* LootText;
+
+	// items in chest ready to be looted
+	TArray<FString> ItemsInChest;
+
 
 private:
 	FVector mCurrentMeshLocation;
