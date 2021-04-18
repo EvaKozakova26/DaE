@@ -39,13 +39,11 @@ AMyActor::AMyActor()
 
 	// create TextRenderComponent with loot information from the chest (object)
 	LootText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("LootText"));
-	LootText->SetRelativeLocation(FVector(-260.f, -90.f, 80.f));
+	LootText->SetRelativeLocation(FVector(-200.f, -90.f, 80.f));
 	LootText->SetRelativeRotation(FQuat(90.0f, 0.f, 90.0f, 1.0f));
-	LootText->SetText(FText::FromString("LOOOOOOTTTTT INFOOOOO"));
 	LootText->SetTextRenderColor(FColor::White);
 	LootText->SetVisibility(false);
 	LootText->AttachTo(Root);
-
 }
 
 // Called when the game starts or when spawned
@@ -59,6 +57,37 @@ void AMyActor::BeginPlay()
 
 	// gets current location of actor mesh
 	mCurrentMeshLocation = Mesh->GetRelativeTransform().GetLocation();
+
+	// init loot items
+	// AItem - musi byt pointer, protoze TArray je plneno pointery (kvuli garbage collectoru)
+	// inicializace itemu = musi se spawnout actor do sveta (item je Actor)
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	AItem* ItemPrkno = (AItem*) GetWorld()->SpawnActor<AItem>(SpawnParams);
+	if (ItemPrkno != nullptr) {
+		ItemPrkno->SetName("Prkno");
+		ItemsInChest.Add(ItemPrkno);
+	}
+
+	AItem* ItemKamen = (AItem*) GetWorld()->SpawnActor<AItem>(SpawnParams);
+	if (ItemKamen != nullptr) {
+		ItemKamen->SetName("Kamen");
+		ItemsInChest.Add(ItemKamen);
+	}
+
+
+	// find length of array
+	int len = sizeof(ItemsInChest) / sizeof(ItemsInChest[0]);
+	// write out items in chest (names)
+	FString lootText = "";
+	if (len > 0) {
+		for (int i = 0; i <= len - 1; i++) {
+			AItem* tempItem = ItemsInChest[i];
+			lootText.Append("[" + FString::FromInt(i + 1) + "]").Append(FString::Printf(TEXT(" %s"), *tempItem->GetName()));
+			lootText.Append("\n");
+		}
+	}
+	LootText->SetText(lootText);
 }
 
 // Called every frame

@@ -29,4 +29,14 @@ void AItem::Tick(float DeltaTime)
 
 }
 
+void AItem::SetName(FString name)
+{
+	ItemName = name;
+}
+
+FString AItem::GetName()
+{
+	return FString(this->ItemName);
+}
+
 

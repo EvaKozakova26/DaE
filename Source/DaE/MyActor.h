@@ -3,6 +3,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Item.h"
 #include "MyActor.generated.h"
 
 UCLASS()
@@ -41,7 +42,7 @@ public:
 	class UTextRenderComponent* LootText;
 
 	// items in chest ready to be looted
-	TArray<FString> ItemsInChest;
+	TArray<AItem*> ItemsInChest;
 
 
 private:
