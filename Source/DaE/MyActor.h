@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Item.h"
+#include "BaseCharacter.h"
 #include "MyActor.generated.h"
 
 UCLASS()
@@ -30,7 +31,7 @@ public:
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
-	AActor* Player;
+	ABaseCharacter* Player;
 
 	// The TextRenderComponent that appears above this Actor when the PlayerCharacter
 	// is able to interact with a part of it.
@@ -41,8 +42,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UTextRenderComponent* LootText;
 
+	// info about loot contained in chest or something
+	UPROPERTY(EditAnywhere)
+    class UTextRenderComponent* InventoryText;
+
 	// items in chest ready to be looted
 	TArray<AItem*> ItemsInChest;
+
+	void SetLootText();
 
 
 private:

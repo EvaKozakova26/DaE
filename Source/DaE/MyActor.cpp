@@ -44,6 +44,12 @@ AMyActor::AMyActor()
 	LootText->SetTextRenderColor(FColor::White);
 	LootText->SetVisibility(false);
 	LootText->AttachTo(Root);
+
+	// create TextRenderComponent with loot information from the chest (object)
+	InventoryText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("InventoryText"));
+	InventoryText->SetTextRenderColor(FColor::White);
+	InventoryText->SetVisibility(false);
+	InventoryText->AttachTo(Root);
 }
 
 // Called when the game starts or when spawned
@@ -66,12 +72,14 @@ void AMyActor::BeginPlay()
 	AItem* ItemPrkno = (AItem*) GetWorld()->SpawnActor<AItem>(SpawnParams);
 	if (ItemPrkno != nullptr) {
 		ItemPrkno->SetName("Prkno");
+		ItemPrkno->SetId(1);
 		ItemsInChest.Add(ItemPrkno);
 	}
 
 	AItem* ItemKamen = (AItem*) GetWorld()->SpawnActor<AItem>(SpawnParams);
 	if (ItemKamen != nullptr) {
 		ItemKamen->SetName("Kamen");
+		ItemKamen->SetId(2);
 		ItemsInChest.Add(ItemKamen);
 	}
 
@@ -113,6 +121,109 @@ void AMyActor::Tick(float DeltaTime)
 			Mesh->SetRelativeLocation(meshLocation);
 			LootText->SetVisibility(true);
 		}
+
+		if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->WasInputKeyJustPressed(EKeys::NumPadOne))
+		{
+
+			int len = ItemsInChest.Num();
+			if (len > 0) 
+			{
+				AItem* FoundEntry = *(ItemsInChest.FindByPredicate([](AItem* InItem)
+					{
+						return InItem->GetId() == 1;
+					}));
+
+				if (IsValid(FoundEntry)) {
+					LootText->SetVisibility(false);
+
+					AItem* ItemOne = FoundEntry;
+					Player->AddToInventory(ItemOne);
+					ItemsInChest.Remove(ItemOne);
+					UE_LOG(LogActor, Warning, TEXT("Lootin item %s"), *ItemOne->GetName());
+
+
+					// find length of array
+					int lenTemp = ItemsInChest.Num();
+					// write out items in chest (names)
+					FString lootText = "";
+					if (lenTemp > 0) {
+						AItem* TempItema = ItemsInChest[0];
+						UE_LOG(LogActor, Warning, TEXT("size is %d"), lenTemp);
+						UE_LOG(LogActor, Warning, TEXT("first item is %s"), *TempItema->GetName());
+						for (int i = 0; i <= lenTemp - 1; i++) {
+							AItem* tempItem = ItemsInChest[i];
+							lootText.Append("[" + FString::FromInt(i + 1) + "]").Append(FString::Printf(TEXT(" %s"), *tempItem->GetName()));
+							lootText.Append("\n");
+						}
+						LootText->SetText(lootText);
+						LootText->SetVisibility(true);
+
+						TArray<AItem*> ItemsInInventory = Player->GetInventory();
+						int invLen = ItemsInInventory.Num();
+						FString invText = "Inventory:";
+						invText.Append("\n");
+						for (int i = 0; i <= invLen - 1; i++) {
+							AItem* tempItem = ItemsInInventory[i];
+							invText.Append("[" + FString::FromInt(i + 1) + "]").Append(FString::Printf(TEXT(" %s"), *tempItem->GetName()));
+							invText.Append("\n");
+						}
+						InventoryText->SetText(invText);
+						InventoryText->SetVisibility(true);
+
+					}
+				
+					
+
+				}
+				else
+				{
+					UE_LOG(LogActor, Warning, TEXT("Error while looting"));
+				}
+			}
+
+			
+
+		
+			
+		}
+		if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->WasInputKeyJustPressed(EKeys::NumPadTwo))
+		{
+			int len = sizeof(ItemsInChest) / sizeof(ItemsInChest[0]);
+			if (len > 1) {
+				AItem* FoundEntry = *(ItemsInChest.FindByPredicate([](AItem* InItem)
+					{
+						return InItem->GetId() == 2;
+					}));
+				if (FoundEntry != nullptr) {
+					AItem* ItemTwo = FoundEntry;
+					Player->AddToInventory(ItemTwo);
+					ItemsInChest.Remove(ItemTwo);
+					UE_LOG(LogActor, Warning, TEXT("Lootin item %s"), *ItemTwo->GetName());
+
+					// find length of array
+					int lenTemp = sizeof(ItemsInChest) / sizeof(ItemsInChest[0]);
+					// write out items in chest (names)
+					FString lootText = "";
+					if (lenTemp > 0) {
+						for (int i = 0; i <= lenTemp - 1; i++) {
+							AItem* tempItem = ItemsInChest[i];
+							lootText.Append("[" + FString::FromInt(i + 1) + "]").Append(FString::Printf(TEXT(" %s"), *tempItem->GetName()));
+							lootText.Append("\n");
+						}
+					}
+					LootText->SetText(lootText);
+				}
+				else
+				{
+					UE_LOG(LogActor, Warning, TEXT("Error while looting"));
+				}
+
+			}
+			
+
+			
+		}
+
 	}
 	else {
 		// set default state for object and notice text

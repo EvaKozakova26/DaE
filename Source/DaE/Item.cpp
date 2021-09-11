@@ -39,4 +39,14 @@ FString AItem::GetName()
 	return FString(this->ItemName);
 }
 
+void AItem::SetId(int id)
+{
+	Id = id;
+}
+
+int AItem::GetId()
+{
+	return this->Id;
+}
+
 

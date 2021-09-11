@@ -22,6 +22,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		FString ItemName = FString(TEXT(""));
 
+	int Id = 0;
+
 	void Pickup();
 
 	void GetPlayer(AActor* Player);
@@ -37,5 +39,9 @@ public:
 	void SetName(FString name);
 
 	FString GetName();
+
+	void SetId(int id);
+
+	int GetId();
 
 };
