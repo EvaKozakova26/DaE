@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include <DaE/Item.h>
 #include "GameFramework/Character.h"
+#include "Engine/Canvas.h"
+
 #include "BaseCharacter.generated.h"
 
 UCLASS()
@@ -33,4 +35,22 @@ public:
 	TArray<AItem*> GetInventory();
 
 	void AddToInventory(AItem* item);
+
+	// info about items in inventory
+	UPROPERTY(EditAnywhere)
+    class UTextRenderComponent* InventoryText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UInventoryComponent* InventorySystem;
+
+	UPROPERTY()
+    UCanvas* Canvas;
+
+	void ShowInventory();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Health")
+	float Health;
+
+	UFUNCTION(BlueprintCallable, Category = "Items")
+	void UseItem(class UGeneralItem* Item);
 };

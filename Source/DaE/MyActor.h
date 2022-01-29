@@ -42,10 +42,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UTextRenderComponent* LootText;
 
-	// info about loot contained in chest or something
-	UPROPERTY(EditAnywhere)
-    class UTextRenderComponent* InventoryText;
-
 	// items in chest ready to be looted
 	TArray<AItem*> ItemsInChest;
 

@@ -44,12 +44,6 @@ AMyActor::AMyActor()
 	LootText->SetTextRenderColor(FColor::White);
 	LootText->SetVisibility(false);
 	LootText->AttachTo(Root);
-
-	// create TextRenderComponent with loot information from the chest (object)
-	InventoryText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("InventoryText"));
-	InventoryText->SetTextRenderColor(FColor::White);
-	InventoryText->SetVisibility(false);
-	InventoryText->AttachTo(Root);
 }
 
 // Called when the game starts or when spawned
@@ -157,18 +151,7 @@ void AMyActor::Tick(float DeltaTime)
 						}
 						LootText->SetText(lootText);
 						LootText->SetVisibility(true);
-
-						TArray<AItem*> ItemsInInventory = Player->GetInventory();
-						int invLen = ItemsInInventory.Num();
-						FString invText = "Inventory:";
-						invText.Append("\n");
-						for (int i = 0; i <= invLen - 1; i++) {
-							AItem* tempItem = ItemsInInventory[i];
-							invText.Append("[" + FString::FromInt(i + 1) + "]").Append(FString::Printf(TEXT(" %s"), *tempItem->GetName()));
-							invText.Append("\n");
-						}
-						InventoryText->SetText(invText);
-						InventoryText->SetVisibility(true);
+						Player->ShowInventory();
 
 					}
 				
